@@ -49,7 +49,7 @@ y = df["kualitas"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 numeric_columns = ["diameter", "berat", "tebal_kulit", "kadar_gula"]
-categorical_columns = ["asal_dearah", "musim_panen"]
+categorical_columns = ["asal_daerah", "musim_panen"]
 ordinal_columns = ["warna"]
 
 warna_order = ["hijau", "kuning", "oranye"]
@@ -69,5 +69,11 @@ model = Pipeline(
         ("model", LogisticRegression())
     ]
 )
+ 
+# print(model)
+model.fit(X_train, y_train) 
+y_pred = model.predict(X_test)
+print("Accuracy : ", accuracy_score(y_test, y_pred))
+print("\n Classification Report : \n", classification_report(y_test, y_pred))
+print("\n Confusion Matrix : ", confusion_matrix(y_test, y_pred))
 
-print(model)
