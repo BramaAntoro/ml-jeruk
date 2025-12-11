@@ -1,5 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
 
 df = pd.read_csv('jeruk_balance_500.csv')
 
@@ -35,5 +41,33 @@ plt.legend()
 plt.grid(True, linestyle="--", alpha=0.3)
 
 
-plt.show()
+# plt.show()
 
+X = df[["diameter","berat","tebal_kulit","kadar_gula","asal_daerah","warna","musim_panen","kualitas"]]
+y = df["kualitas"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+numeric_columns = ["diameter", "berat", "tebal_kulit", "kadar_gula"]
+categorical_columns = ["asal_dearah", "musim_panen"]
+ordinal_columns = ["warna"]
+
+warna_order = ["hijau", "kuning", "oranye"]
+ordinal_order = [warna_order]
+
+preprocessing = ColumnTransformer(
+    transformers=[
+        ("scaler", StandardScaler(), numeric_columns),
+        ("ohe", OneHotEncoder(), categorical_columns),
+        ("oe", OrdinalEncoder(categories=ordinal_order), ordinal_columns) 
+    ]   
+)
+
+model = Pipeline(
+    steps=[
+        ("preprocessing", preprocessing),
+        ("model", LogisticRegression())
+    ]
+)
+
+print(model)
