@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
+import joblib
 
 df = pd.read_csv('jeruk_balance_500.csv')
 
@@ -84,3 +85,5 @@ prediksi = model.predict(data_baru)[0]
 presentase = max(model.predict_proba(data_baru)[0])
 
 print(f"MOdel memprediksi {prediksi} dengan tingkat keyakinan {presentase * 100:.2f}%")
+
+joblib.dump(model, "model_klasifikasi_jeruk.joblib")
