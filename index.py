@@ -43,7 +43,7 @@ plt.grid(True, linestyle="--", alpha=0.3)
 
 # plt.show()
 
-X = df[["diameter","berat","tebal_kulit","kadar_gula","asal_daerah","warna","musim_panen","kualitas"]]
+X = df[["diameter","berat","tebal_kulit","kadar_gula","asal_daerah","warna","musim_panen"]]
 y = df["kualitas"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -73,7 +73,14 @@ model = Pipeline(
 # print(model)
 model.fit(X_train, y_train) 
 y_pred = model.predict(X_test)
-print("Accuracy : ", accuracy_score(y_test, y_pred))
-print("\n Classification Report : \n", classification_report(y_test, y_pred))
-print("\n Confusion Matrix : ", confusion_matrix(y_test, y_pred))
+# print("Accuracy : ", accuracy_score(y_test, y_pred))
+# print("\n Classification Report : \n", classification_report(y_test, y_pred))
+# print("\n Confusion Matrix : ", confusion_matrix(y_test, y_pred))
 
+data_baru = pd.DataFrame([[7.89, 200, 0.35, 10, "Kalimantan", "oranye", "kemarau"]], 
+    columns=["diameter","berat","tebal_kulit","kadar_gula","asal_daerah","warna","musim_panen"])
+
+prediksi = model.predict(data_baru)[0]
+presentase = max(model.predict_proba(data_baru)[0])
+
+print(f"MOdel memprediksi {prediksi} dengan tingkat keyakinan {presentase * 100:.2f}%")
